@@ -16,9 +16,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         //Launch at very first when the app launches.
-        
-        print(NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).last! as String)
-        
         return true
     }
 
@@ -30,8 +27,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationDidEnterBackground(_ application: UIApplication) {
         //when the app dissappears off the screen (say, when the home button pressed) or open up a different app
-        print("applicationDidEnterBackground")
-        
     }
 
     func applicationWillEnterForeground(_ application: UIApplication) {
@@ -44,7 +39,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationWillTerminate(_ application: UIApplication) {
         //Called when the app is basically terminated
-        print("applicationWillTerminate")
     }
 
 
