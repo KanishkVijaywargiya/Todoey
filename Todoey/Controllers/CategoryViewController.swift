@@ -56,17 +56,23 @@ class CategoryViewController: SwipeTableViewController {
             //when button clicked , what will happen?!
             
             let newCategory = Category()
-            newCategory.name = textField.text!
+            if !(textField.text?.isEmpty)!{
+                newCategory.name = textField.text!
+            }else{
+                print("Category need to have a name!")
+                return
+            }
             newCategory.color = UIColor.randomFlat.hexValue()
             
             self.save(category: newCategory)
         }
-        alert.addTextField { (field) in
-            field.placeholder="Add a new category"
-            textField = field
-        }
         alert.addAction(action)
-        present(alert,animated: true,completion: nil)
+
+        alert.addTextField { (field) in
+            textField = field
+            field.placeholder="Add a new category"
+        }
+                present(alert,animated: true,completion: nil)
     }
     
     
@@ -85,17 +91,20 @@ class CategoryViewController: SwipeTableViewController {
     //Read Data
     func loadCategories(){
         
-        categories = realm.objects(Category.self)
+        categories = realm.objects(Category.self).sorted(byKeyPath: "name", ascending: true)
 
         tableView.reloadData()
     }
     
     //MARK: - Delete Data From Swipe
     override func updateModel(at indexPath: IndexPath) {
-        super.updateModel(at: indexPath)//this is to call the functions from superclass
+        //this is to call the functions from superclass
         if let categoryForDeletion = self.categories?[indexPath.row]{
             do{
                 try self.realm.write {
+                    for item in categoryForDeletion.items{
+                        self.realm.delete(item)
+                    }
                     self.realm.delete(categoryForDeletion)
                 }
             }catch{

@@ -2,7 +2,9 @@ import UIKit
 import SwipeCellKit
 
 class SwipeTableViewController: UITableViewController,SwipeTableViewCellDelegate {
-
+    
+    var cell: UITableViewCell?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.rowHeight = 80.0
@@ -28,15 +30,14 @@ class SwipeTableViewController: UITableViewController,SwipeTableViewCellDelegate
         return [deleteAction]
     }
     func tableView(_ tableView: UITableView, editActionsOptionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> SwipeOptions {
-        var options = SwipeOptions()
+        var options = SwipeTableOptions()
         options.expansionStyle = .destructive
-        options.transitionStyle = .border
         return options
     }
     
     func updateModel(at indexPath: IndexPath){
         //Update the dataModel
-//        print("Data deleted from SuperClass")
+        print("Data deleted from SuperClass")
     }
 }
 

@@ -4,9 +4,10 @@ import ChameleonFramework
 
 class TodoListViewController: SwipeTableViewController {
 
-    @IBOutlet weak var searchBar: UISearchBar!
     let realm = try! Realm()
     var todoItem : Results<Item>?
+    
+    @IBOutlet weak var searchBar: UISearchBar!
     
     var selectedCategory : Category? {
         didSet{
@@ -23,10 +24,10 @@ class TodoListViewController: SwipeTableViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         
-        
+        title = selectedCategory?.name
         guard let colorHex = selectedCategory?.color else{fatalError()}
             
-            title = selectedCategory?.name
+        
             updateNavBar(withHexCode: colorHex)
         
 
@@ -37,9 +38,9 @@ class TodoListViewController: SwipeTableViewController {
     }
     
     //MARK: - Nav Bar Setup methods
-    func updateNavBar(withHexCode colorhexCode : String){
+    func updateNavBar(withHexCode colorHexCode : String){
         guard let navBar = navigationController?.navigationBar else{fatalError("Navigation Controller doesnot exist.")}
-        guard let navBarColor = UIColor(hexString: colorhexCode) else{fatalError()}
+        guard let navBarColor = UIColor(hexString: colorHexCode) else{fatalError()}
         navBar.barTintColor = navBarColor
         navBar.tintColor = ContrastColorOf(navBarColor, returnFlat: true)
         navBar.largeTitleTextAttributes = [NSAttributedStringKey.foregroundColor : ContrastColorOf(navBarColor, returnFlat: true)]
@@ -62,6 +63,10 @@ class TodoListViewController: SwipeTableViewController {
                 cell.backgroundColor = color
                 cell.textLabel?.textColor = ContrastColorOf(color, returnFlat: true)
             }
+            //            print("version 1: \(CGFloat(indexPath.row / todoItems!.count))")
+            //
+            //            print("version 2: \(CGFloat(indexPath.row) / CGFloat(todoItems!.count))")
+            
             //Ternary Operator ==>
             //value = condition ? valueIfTrue : valueIfFalse
             cell.accessoryType = item.done ? .checkmark : .none
@@ -101,8 +106,13 @@ class TodoListViewController: SwipeTableViewController {
                 do{
                     try self.realm.write {
                         let newItem = Item()
-                        newItem.title = textField.text!
-                        newItem.dateCreated = Date()
+                        if !(textField.text?.isEmpty)!{
+                            newItem.title = textField.text!
+                            newItem.dateCreated = Date()
+                        }else{
+                            print("Items need to have a name!")
+                            return
+                        }
                         currentCategory.items.append(newItem)
                     }
                 }catch{
